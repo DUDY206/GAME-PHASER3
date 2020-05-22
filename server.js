@@ -45,15 +45,16 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('newPlayer', players[socket.id]);
     //Check player joined
 
-    // console.log('\nUserID: '+socket.id+' connected');
-    // console.log('Total players: '+Object.keys(players).length);
+    console.log('\nUserID: '+socket.id+' connected');
+    console.log('Total players: '+Object.keys(players).length);
 
     // when a player disconnects, remove them from our players object
     socket.on('disconnect', function () {
-        console.log('User'+socket.id+' disconnected');
-        console.log('Total players: '+Object.keys(players).length);
+        
         // remove this player from our players object
         delete players[socket.id];
+        console.log('User'+socket.id+' disconnected');
+        console.log('Total players: '+Object.keys(players).length);
         // emit a message to all players to remove this player
         io.emit('disconnect', socket.id);
     });
@@ -65,7 +66,7 @@ io.on('connection', function (socket) {
         players[socket.id].y = movementData.y;
         players[socket.id].rotation = movementData.rotation;
         // emit a message to all players about the player that moved
-        console.log(players[socket.id].x, players[socket.id].y, players[socket.id].rotation);
+        // console.log(players[socket.id].x, players[socket.id].y, players[socket.id].rotation);
         socket.broadcast.emit('playerMoved', players[socket.id]);
     });
 

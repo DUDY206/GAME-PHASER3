@@ -20,6 +20,7 @@ var config = {
 var game = new Phaser.Game(config);
 
 function preload() {
+    this.load.image('bg', 'assets/bg.jpg');
     this.load.image('ship', 'assets/spaceShips_001.png');
     this.load.image('otherPlayer', 'assets/enemyBlack5.png');
     this.load.image('star', 'assets/star_gold.png');
@@ -36,6 +37,7 @@ function addPlayer(self,playerInfo){
     self.ship.setDrag(100);
     self.ship.setAngularDrag(100);
     self.ship.setMaxVelocity(200);
+    // console.log(self.ship);
 }
 
 function addOtherPlayers(self, playerInfo) {
@@ -50,11 +52,13 @@ function addOtherPlayers(self, playerInfo) {
 }
 
 function create() {
+    // console.log(this);
+    this.add.image(400, 300, 'bg');
     var self = this;
     this.socket = io();
     this.otherPlayers = this.physics.add.group();
     this.socket.on('currentPlayers', function (players) {
-        // console.log(players);
+        
         Object.keys(players).forEach(function (id) {
         if (players[id].playerId === self.socket.id) {
             addPlayer(self, players[id]);
@@ -63,6 +67,10 @@ function create() {
           }
         });
     });
+    console.log("Other players\n")
+    console.log(this.otherPlayers);
+    console.log("Ship");
+    console.log(this);
     this.socket.on('newPlayer', function (playerInfo) {
         addOtherPlayers(self, playerInfo);
     });
